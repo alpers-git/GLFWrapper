@@ -8,7 +8,7 @@
 #ifdef __linux__ 
 #include "GL/gl.h"
 #endif
-#include "GLFW/glfw3.h"
+#include "glfw/glfw3.h"
 #include "owl/common/math/vec.h"
 
 #include <cuda_runtime.h>

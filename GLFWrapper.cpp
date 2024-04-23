@@ -1,5 +1,5 @@
 // implementation of GLFWHandler
-#include "glfwHandler.h"
+#include "GLFWrapper.h"
 
 GLFWHandler *GLFWHandler::instance = nullptr;
 
