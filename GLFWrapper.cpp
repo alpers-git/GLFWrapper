@@ -1,6 +1,9 @@
 // implementation of GLFWHandler
 #include "GLFWrapper.h"
 
+namespace GLFWrapper
+{
+
 GLFWHandler *GLFWHandler::instance = nullptr;
 
 GLFWHandler::GLFWHandler()
@@ -57,8 +60,8 @@ void GLFWHandler::SetCallbacks()
 {
     glfwSetCursorPosCallback(window, [](GLFWwindow *window, double x, double y) {
         auto glfw = GLFWHandler::getInstance();
-        glfw->mouseState.delta = owl::vec2f(x, y) - glfw->mouseState.position;
-        glfw->mouseState.position = owl::vec2f(x, y);
+        glfw->mouseState.delta = vec2f(x, y) - glfw->mouseState.position;
+        glfw->mouseState.position = vec2f(x, y);
     });
 
     glfwSetMouseButtonCallback(window, [](GLFWwindow *window, int button, int action, int mods) {
@@ -91,7 +94,7 @@ void GLFWHandler::SetCallbacks()
 
     glfwSetFramebufferSizeCallback(window, [](GLFWwindow *window, int width, int height) {
         auto glfw = GLFWHandler::getInstance();
-        glfw->winSize = owl::vec2i(width, height);
+        glfw->winSize = vec2i(width, height);
 
         if (glfw->fbTexture == 0) 
         {
@@ -121,7 +124,7 @@ void GLFWHandler::swapBuffers()
 
 void GLFWHandler::pollEvents()
 {
-    GLFWHandler::getInstance()->mouseState.delta = owl::vec2f(0, 0);
+    GLFWHandler::getInstance()->mouseState.delta = vec2f(0, 0);
     glfwPollEvents();
 }
 
@@ -130,7 +133,7 @@ int GLFWHandler::windowShouldClose()
     return glfwWindowShouldClose(window);
 }
 
-owl::vec2i GLFWHandler::getWindowSize()
+vec2i GLFWHandler::getWindowSize()
 {
     return winSize;
 }
@@ -145,20 +148,20 @@ void GLFWHandler::draw(const void *fbPointer)
     glfwMakeContextCurrent(window);
     if (false)
     {
-        (cudaGraphicsMapResources(1, &cuDisplayTexture));
+        // (cudaGraphicsMapResources(1, &cuDisplayTexture));
 
-        cudaArray_t array;
-        (cudaGraphicsSubResourceGetMappedArray(&array, cuDisplayTexture, 0, 0));
-        {
-            cudaMemcpy2DToArray(array,
-                                0,
-                                0,
-                                reinterpret_cast<const void *>(fbPointer),
-                                winSize.x * sizeof(uint32_t),
-                                winSize.x * sizeof(uint32_t),
-                                winSize.y,
-                                cudaMemcpyDeviceToDevice);
-        }
+        // cudaArray_t array;
+        // (cudaGraphicsSubResourceGetMappedArray(&array, cuDisplayTexture, 0, 0));
+        // {
+        //     cudaMemcpy2DToArray(array,
+        //                         0,
+        //                         0,
+        //                         reinterpret_cast<const void *>(fbPointer),
+        //                         winSize.x * sizeof(uint32_t),
+        //                         winSize.x * sizeof(uint32_t),
+        //                         winSize.y,
+        //                         cudaMemcpyDeviceToDevice);
+        // }
     }
     else
     {
@@ -207,6 +210,7 @@ void GLFWHandler::draw(const void *fbPointer)
     glEnd();
     if (false)
     {
-        (cudaGraphicsUnmapResources(1, &cuDisplayTexture));
+        // (cudaGraphicsUnmapResources(1, &cuDisplayTexture));
     }
 }
+} // namespace GLFWrapper
