@@ -102,10 +102,10 @@ using vec2f = vec2<float>;
 using vec2i = vec2<int>;
 
 
-class GLFWHandler
+class GLFWrapper
 {
     public:
-        static GLFWHandler* getInstance();
+        static GLFWrapper* getInstance();
         GLFWwindow* getWindow();
         void initWindow(int width, int height, std::string title);
         void destroyWindow();
@@ -170,9 +170,9 @@ class GLFWHandler
         GLuint   fbTexture  {0};
         // cudaGraphicsResource_t cuDisplayTexture { 0 };
 
-        static GLFWHandler* instance;
-        GLFWHandler();
-        ~GLFWHandler();
+        static GLFWrapper* instance;
+        GLFWrapper();
+        ~GLFWrapper();
 
 
         void SetCallbacks();     

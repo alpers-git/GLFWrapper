@@ -1,12 +1,12 @@
-// implementation of GLFWHandler
+// implementation of GLFWrapper
 #include "GLFWrapper.h"
 
 namespace GLFWrapper
 {
 
-GLFWHandler *GLFWHandler::instance = nullptr;
+GLFWrapper *GLFWrapper::instance = nullptr;
 
-GLFWHandler::GLFWHandler()
+GLFWrapper::GLFWrapper()
 {
     if (!glfwInit())
     {
@@ -14,26 +14,26 @@ GLFWHandler::GLFWHandler()
     }
 }
 
-GLFWHandler::~GLFWHandler()
+GLFWrapper::~GLFWrapper()
 {
     glfwTerminate();
 }
 
-GLFWHandler *GLFWHandler::getInstance()
+GLFWrapper *GLFWrapper::getInstance()
 {
     if (instance == nullptr)
     {
-        instance = new GLFWHandler();
+        instance = new GLFWrapper();
     }
     return instance;
 }
 
-GLFWwindow* GLFWHandler::getWindow()
+GLFWwindow* GLFWrapper::getWindow()
 {
     return window;
 }
 
-void GLFWHandler::initWindow(int width, int height, std::string title)
+void GLFWrapper::initWindow(int width, int height, std::string title)
 {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
@@ -56,16 +56,16 @@ void GLFWHandler::initWindow(int width, int height, std::string title)
                  GL_UNSIGNED_BYTE, nullptr);
 }
 
-void GLFWHandler::SetCallbacks()
+void GLFWrapper::SetCallbacks()
 {
     glfwSetCursorPosCallback(window, [](GLFWwindow *window, double x, double y) {
-        auto glfw = GLFWHandler::getInstance();
+        auto glfw = GLFWrapper::getInstance();
         glfw->mouseState.delta = vec2f(x, y) - glfw->mouseState.position;
         glfw->mouseState.position = vec2f(x, y);
     });
 
     glfwSetMouseButtonCallback(window, [](GLFWwindow *window, int button, int action, int mods) {
-        auto glfw = GLFWHandler::getInstance();
+        auto glfw = GLFWrapper::getInstance();
         if(glfw->mouseState.imGuiPolling)
             return;
         if (button == GLFW_MOUSE_BUTTON_LEFT)
@@ -83,7 +83,7 @@ void GLFWHandler::SetCallbacks()
     });
 
     glfwSetKeyCallback(window, [](GLFWwindow *window, int key, int scancode, int action, int mods) {
-        auto glfw = GLFWHandler::getInstance();
+        auto glfw = GLFWrapper::getInstance();
         if(action != GLFW_RELEASE)
         {
             glfw->key.keys[key] = action;
@@ -93,7 +93,7 @@ void GLFWHandler::SetCallbacks()
     });
 
     glfwSetFramebufferSizeCallback(window, [](GLFWwindow *window, int width, int height) {
-        auto glfw = GLFWHandler::getInstance();
+        auto glfw = GLFWrapper::getInstance();
         glfw->winSize = vec2i(width, height);
 
         if (glfw->fbTexture == 0) 
@@ -107,43 +107,43 @@ void GLFWHandler::SetCallbacks()
     });
 }
 
-void GLFWHandler::setWindowSize(int width, int height)
+void GLFWrapper::setWindowSize(int width, int height)
 {
     glfwSetWindowSize(window, width, height);
 }
 
-void GLFWHandler::destroyWindow()
+void GLFWrapper::destroyWindow()
 {
     glfwDestroyWindow(window);
 }
 
-void GLFWHandler::swapBuffers()
+void GLFWrapper::swapBuffers()
 {
     glfwSwapBuffers(window);
 }
 
-void GLFWHandler::pollEvents()
+void GLFWrapper::pollEvents()
 {
-    GLFWHandler::getInstance()->mouseState.delta = vec2f(0, 0);
+    GLFWrapper::getInstance()->mouseState.delta = vec2f(0, 0);
     glfwPollEvents();
 }
 
-int GLFWHandler::windowShouldClose()
+int GLFWrapper::windowShouldClose()
 {
     return glfwWindowShouldClose(window);
 }
 
-vec2i GLFWHandler::getWindowSize()
+vec2i GLFWrapper::getWindowSize()
 {
     return winSize;
 }
 
-void *GLFWHandler::getWindowUserPointer()
+void *GLFWrapper::getWindowUserPointer()
 {
     return glfwGetWindowUserPointer(window);
 }
 
-void GLFWHandler::draw(const void *fbPointer)
+void GLFWrapper::draw(const void *fbPointer)
 {
     glfwMakeContextCurrent(window);
     if (false)
